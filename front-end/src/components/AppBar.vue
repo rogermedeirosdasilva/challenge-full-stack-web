@@ -1,35 +1,6 @@
 <template>
   <v-container>
-    <v-app-bar app color="black" dark>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <div class="d-flex align-center">
-        <v-img
-          alt="Grupo A"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-height="50"
-          src="@/assets/white-logo.png"
-          height="50"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn href="http://www.grupoa.com.br" target="_blank" text>
-        <span class="mr-2">Visitar WebSite</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </v-app-bar>
-
-    <v-navigation-drawer absolute v-model="drawer" temporary id="menu-drawer">
-      <v-list-item>
-        <v-list-item-content>
-          <v-list-item-title class="module-header-style">Módulo Acadêmico</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-
-      <v-divider></v-divider>
-
+    <v-navigation-drawer v-model="drawer" :clipped="$vuetify.breakpoint.lgAndUp" app>
       <v-list dense>
         <v-list-item v-for="item in items" :key="item.title" link>
           <v-list-item-icon>
@@ -44,40 +15,46 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
+
+    <v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app color="blue darken-3" dark>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
+        <span class="hidden-sm-and-down">
+          <v-img src="@/assets/white-logo.png" alt="Grupo A" width="60"></v-img>
+        </span>
+      </v-toolbar-title>
+      <v-text-field
+        flat
+        solo-inverted
+        hide-details
+        prepend-inner-icon="mdi-magnify"
+        label="Pesquisar"
+        class="hidden-sm-and-down"
+      ></v-text-field>
+      <v-spacer></v-spacer>
+      <v-btn icon>
+        <v-icon>mdi-bell</v-icon>
+      </v-btn>
+    </v-app-bar>
   </v-container>
 </template>
 
 <script>
 export default {
-  name: "AppBar",
+  props: {
+    source: String
+  },
   data: () => ({
-    drawer: false,
-    items: [
-      { title: "Início", icon: "mdi-view-dashboard", route: "/" },
-      { title: "Alunos", icon: "mdi-account", route: "/student/list" }
-    ]
-  }),
-  watch: {
-    group() {
-      this.drawer = false;
-    }
-  }
+    dialog: false,
+    drawer: null,
+    items: [{ icon: "mdi-contacts", title: "Alunos", route: "/student/list" }]
+  })
 };
 </script>
 
-<style>
-.header-space {
-  height: 70px;
-}
-
-.module-header-style {
-  font-size: 18px;
-  font-weight: 500;
-  text-align: center;
-}
-
-#menu-drawer {
-  position: fixed;
-  margin-top: 65px;
+<style scoped>
+a {
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.87) !important;
 }
 </style>

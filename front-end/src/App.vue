@@ -1,11 +1,9 @@
 <template>
-  <v-app>
-    <v-container>
-      <v-content id="appArea">
-        <router-view />
-      </v-content>
-    </v-container>
+  <v-app id="inspire">
     <AppBar />
+    <v-content>
+      <router-view />
+    </v-content>
   </v-app>
 </template>
 
