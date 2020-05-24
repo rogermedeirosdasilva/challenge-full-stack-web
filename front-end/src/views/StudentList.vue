@@ -4,13 +4,20 @@
 
     <v-card>
       <v-card-title>
-        <v-text-field
-          v-model="search"
-          append-icon="mdi-search"
-          label="Pesquisar"
-          single-line
-          hide-details
-        ></v-text-field>
+        <v-row cols="12">
+          <v-col md="10">
+            <v-text-field
+              v-model="search"
+              append-icon="mdi-search"
+              label="Pesquisar"
+              single-line
+              hide-details
+            ></v-text-field>
+          </v-col>
+          <v-col md="2">
+            <v-btn text link to="/student/add">Cadastrar Aluno</v-btn>
+          </v-col>
+        </v-row>
       </v-card-title>
       <v-data-table :headers="headers" :items="desserts" :search="search"></v-data-table>
     </v-card>
@@ -30,11 +37,11 @@ export default {
         {
           text: "RA",
           align: "start",
-          filterable: false,
+          filterable: true,
           value: "ra"
         },
-        { text: "Nome", value: "name" },
-        { text: "CPF", value: "cpf" }
+        { text: "Nome", value: "name", filterable: true },
+        { text: "CPF", value: "cpf", filterable: true }
       ],
       desserts: [
         {
