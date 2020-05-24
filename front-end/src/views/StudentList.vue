@@ -15,11 +15,9 @@
       <v-data-table :headers="headers" :items="desserts" :search="search"></v-data-table>
     </v-card>
 
-    <router-link to="/student/add">
-      <v-btn bottom color="pink" dark fab fixed right>
-        <v-icon>mdi-plus</v-icon>
-      </v-btn>
-    </router-link>
+    <v-btn bottom color="pink" dark fab fixed right link to="/student/add">
+      <v-icon>mdi-plus</v-icon>
+    </v-btn>
   </v-container>
 </template>
 
@@ -36,7 +34,7 @@ export default {
           value: "ra"
         },
         { text: "Nome", value: "name" },
-        { text: "CPF", value: "cpf" },
+        { text: "CPF", value: "cpf" }
       ],
       desserts: [
         {

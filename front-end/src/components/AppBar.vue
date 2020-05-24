@@ -1,16 +1,14 @@
 <template>
   <v-container>
-    <v-navigation-drawer v-model="drawer" :clipped="$vuetify.breakpoint.lgAndUp" app>
+    <v-navigation-drawer v-model="drawer" :clipped="$vuetify.breakpoint.lgAndUp" app temporary>
       <v-list dense>
-        <v-list-item v-for="item in items" :key="item.title" link>
+        <v-list-item v-for="item in items" :key="item.title" :to="item.route" link>
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
-            <router-link v-bind:to="item.route">
               <v-list-item-title>{{ item.title }}</v-list-item-title>
-            </router-link>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -41,9 +39,6 @@
 
 <script>
 export default {
-  props: {
-    source: String
-  },
   data: () => ({
     dialog: false,
     drawer: null,
