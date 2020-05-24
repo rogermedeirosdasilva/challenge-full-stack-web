@@ -1,0 +1,31 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "preteste": "NODE_ENV=teste npx sequelize db:migrate:undo:all && npx sequelize db:migrate && npx sequelize db:seed:all",
+    "teste": "NODE_ENV=teste jest --testTimeout=10000",
+    "postteste": "NODE_ENV=teste npx sequelize db:migrate:undo:all",
+    "predev": "NODE_ENV=dev",
+    "dev": "NODE_ENV=dev nodemon src/server.js --ignore __tests__",
+    "env-teste": "NODE_ENV=teste nodemon src/server.js --ignore __tests__"
+  },
+  "author": "Roger Medeiros da Silva",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "pg": "^8.2.1",
+    "sequelize": "^5.21.10"
+  },
+  "devDependencies": {
+    "jest": "^26.0.1",
+    "nodemon": "^2.0.4",
+    "sequelize-cli": "^5.5.1",
+    "sqlite3": "^4.2.0",
+    "supertest": "^4.0.2"
+  }
+}
