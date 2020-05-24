@@ -59,15 +59,25 @@ class StudentController {
    async getById(req, res) {
       try {
          const { ra } = req.params;
-         const retorno = await students.findOne({
+         const result = await students.findOne({
             where: { ra }
          });
 
-         if (!retorno) {
+         if (!result) {
             return res.status(204).send({ message: "Objeto não encontrado." });
          }
 
-         return res.status(200).send(retorno);
+         return res.status(200).send(result);
+      } catch (error) {
+         return res.status(500).send(error);
+      }
+   }
+
+   async getAll(req, res) {
+      try {
+         const result = await students.findAll();
+
+         return res.status(200).send(result);
       } catch (error) {
          return res.status(500).send(error);
       }

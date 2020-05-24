@@ -2,8 +2,8 @@ const request = require("supertest");
 const app = require("../../src/app");
 
 describe("Students", () => {
-   it("Should return the user with the corresponding RA", async () => {
-      const response = await request(app).get("/api/user/get/000120");
+   it("Should return the student with the corresponding RA", async () => {
+      const response = await request(app).get("/api/student/get/000120");
 
       // Expects a response code 200 from API
       expect(response.status).toBe(200);
@@ -14,14 +14,24 @@ describe("Students", () => {
    });
 
    it("Should return error 204 when searching for a nonexistent RA number", async () => {
-      const response = await request(app).get("/api/user/get/333222");
+      const response = await request(app).get("/api/student/get/333222");
 
       // Expects a response code 204 from API
       expect(response.status).toBe(204);
    });
 
+   it("Should return the student list", async () => {
+      const response = await request(app).get("/api/student/get");
+
+      // Expects a response code 200 from API
+      expect(response.status).toBe(200);
+
+      // Expecting 8 students from test database
+      expect(response.body.length).toBe(8);
+   });
+
    it("Should insert a student in the database when received all the correct properties", async () => {
-      const response = await request(app).post("/api/user/create")
+      const response = await request(app).post("/api/student/create")
          .send({
             ra: "000299",
             name: "Roger Medeiros",
@@ -34,7 +44,7 @@ describe("Students", () => {
    });
 
    it("Should return error message when trying to insert a student with an RA number already registered", async () => {
-      const response = await request(app).post("/api/user/create")
+      const response = await request(app).post("/api/student/create")
          .send({
             ra: "000120",
             name: "Roger Medeiros",
@@ -50,7 +60,7 @@ describe("Students", () => {
    });
 
    it("Should delete an existing student from the database when you receive an existing RA number", async () => {
-      const response = await request(app).delete("/api/user/delete")
+      const response = await request(app).delete("/api/student/delete")
          .send({
             ra: "000120"
          });
@@ -60,7 +70,7 @@ describe("Students", () => {
    });
 
    it("Should return a 204 code when attempting to remove a student with a non-existent RA number", async () => {
-      const response = await request(app).delete("/api/user/delete")
+      const response = await request(app).delete("/api/student/delete")
          .send({
             ra: "333222"
          });
@@ -70,7 +80,7 @@ describe("Students", () => {
    });
 
    it("Should update student data in the database when received all the correct properties", async () => {
-      const response = await request(app).put("/api/user/update/000299")
+      const response = await request(app).put("/api/student/update/000299")
          .send({
             name: "Roger Medeiros da Silva"            
          });
@@ -80,7 +90,7 @@ describe("Students", () => {
    });
 
    it("Should return a 204 code when attempting to update a student with a non-existent RA number", async () => {
-      const response = await request(app).put("/api/user/update/333222")
+      const response = await request(app).put("/api/student/update/333222")
          .send({
             name: "Roger Medeiros da Silva"            
          });

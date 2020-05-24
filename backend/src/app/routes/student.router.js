@@ -3,13 +3,15 @@ const StudentController = require("../controllers/student.controller");
 class StudentRouter {
   async addRoutes(routes) {
     // get student by RA
-    routes.get("/api/user/get/:ra", StudentController.getById);
+    routes.get("/api/student/get/:ra", StudentController.getById);
+    // get student list
+    routes.get("/api/student/get", StudentController.getAll);
     // insert a student
-    routes.post("/api/user/create", StudentController.create);
+    routes.post("/api/student/create", StudentController.create);
     // update student data
-    routes.put("/api/user/update/:ra", StudentController.update);
+    routes.put("/api/student/update/:ra", StudentController.update);
     // remove a student
-    routes.delete("/api/user/delete", StudentController.delete);
+    routes.delete("/api/student/delete", StudentController.delete);
   }
 }
 
