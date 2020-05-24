@@ -3,7 +3,7 @@ const app = require("../../src/app");
 
 describe("Students", () => {
    it("Should return the user with the corresponding RA", async () => {
-      const response = await request(app).get("/api/user/get?ra=000120");
+      const response = await request(app).get("/api/user/get/000120");
 
       // Expects a response code 200 from API
       expect(response.status).toBe(200);
@@ -14,13 +14,13 @@ describe("Students", () => {
    });
 
    it("Should return error 204 when searching for a nonexistent RA number", async () => {
-      const response = await request(app).get("/api/user/get?ra=333222");
+      const response = await request(app).get("/api/user/get/333222");
 
       // Expects a response code 204 from API
       expect(response.status).toBe(204);
    });
 
-   it("Should insert a student in the database when you have received all the correct properties", async () => {
+   it("Should insert a student in the database when received all the correct properties", async () => {
       const response = await request(app).post("/api/user/create")
          .send({
             ra: "000299",
@@ -63,6 +63,26 @@ describe("Students", () => {
       const response = await request(app).delete("/api/user/delete")
          .send({
             ra: "333222"
+         });
+
+      // Expects a response code 204 from API
+      expect(response.status).toBe(204);
+   });
+
+   it("Should update student data in the database when received all the correct properties", async () => {
+      const response = await request(app).put("/api/user/update/000299")
+         .send({
+            name: "Roger Medeiros da Silva"            
+         });
+
+      // Expects a response code 200 from API
+      expect(response.status).toBe(200);
+   });
+
+   it("Should return a 204 code when attempting to update a student with a non-existent RA number", async () => {
+      const response = await request(app).put("/api/user/update/333222")
+         .send({
+            name: "Roger Medeiros da Silva"            
          });
 
       // Expects a response code 204 from API

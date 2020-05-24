@@ -20,6 +20,25 @@ class StudentController {
       }
    }
 
+   async update(req, res) {
+      try {
+         const { ra } = req.params;
+         const objStudent = req.body;
+
+         const [updated] = await students.update(objStudent, {
+            where: { ra }
+         });
+
+         if (updated) {
+            return res.status(200).send();
+         }
+
+         return res.status(204).send({ message: "Objeto não encontrado" });
+      } catch (error) {
+         return res.status(500).send(error);
+      }
+   }
+
    async delete(req, res) {
       try {
          const { ra } = req.body;
@@ -39,7 +58,7 @@ class StudentController {
 
    async getById(req, res) {
       try {
-         const { ra } = req.query;
+         const { ra } = req.params;
          const retorno = await students.findOne({
             where: { ra }
          });
