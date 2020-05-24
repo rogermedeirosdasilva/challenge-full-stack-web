@@ -21,7 +21,12 @@ const routes = [
 		name: "Student",
 		path: "/student/add",
 		component: StudentDetail,
-	},	
+	},
+	{
+		name: "Student Edit",
+		path: "/student/edit/:ra",
+		component: StudentDetail
+	},
 ];
 
 const router = new Router({ routes });

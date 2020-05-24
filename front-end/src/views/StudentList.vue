@@ -19,7 +19,17 @@
           </v-col>
         </v-row>
       </v-card-title>
-      <v-data-table :headers="headers" :items="desserts" :search="search"></v-data-table>
+      <v-data-table :headers="headers" :items="students" :search="search">
+        <template v-slot:item.cpf="{ item }">
+          <span>{{ item.cpf | formatCPF }}</span>
+        </template>
+        <template v-slot:item.email="{ item }">
+          <span>
+            <v-btn color="success" text link :to="`/student/edit/${item.ra}`">Editar</v-btn>
+            <v-btn color="error" text link :to="`/student/delete/${item.ra}`">Excluir</v-btn>
+          </span>
+        </template>
+      </v-data-table>
     </v-card>
 
     <v-btn bottom color="pink" dark fab fixed right link to="/student/add">
@@ -29,6 +39,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
@@ -41,67 +53,21 @@ export default {
           value: "ra"
         },
         { text: "Nome", value: "name", filterable: true },
-        { text: "CPF", value: "cpf", filterable: true }
+        { text: "CPF", value: "cpf", filterable: true },
+        { text: "Ações", value: "email" }
       ],
-      desserts: [
-        {
-          name: "Frozen Yogurt",
-          ra: 159,
-          cpf: "100"
-        },
-        {
-          name: "Ice cream sandwich",
-          ra: 237,
-          cpf: "0221546565"
-        },
-        {
-          name: "Eclair",
-          ra: 262,
-          cpf: "326058982"
-        },
-        {
-          name: "Cupcake",
-          ra: 67,
-          cpf: "885233255"
-        },
-        {
-          name: "Gingerbread",
-          ra: 356,
-          cpf: "32563322"
-        },
-        {
-          name: "Jelly bean",
-          ra: 375,
-          cpf: "002145002111"
-        },
-        {
-          name: "Lollipop",
-          ra: 392,
-          cpf: "222300252201"
-        },
-        {
-          name: "Honeycomb",
-          ra: 408,
-          cpf: "4523233022011"
-        },
-        {
-          name: "Donut",
-          ra: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9,
-          cpf: "22654423434"
-        },
-        {
-          name: "KitKat",
-          ra: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7,
-          cpf: "34343434"
-        }
-      ]
+      students: []
     };
+  },
+  mounted() {
+    axios
+      .get("http://localhost:3000/api/student/get")
+      .then(response => (this.students = response.data));
+  },
+  filters: {
+    formatCPF(value) {
+      return value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/g, "$1.$2.$3-$4");
+    }
   }
 };
 </script>

@@ -51,13 +51,24 @@
     <v-btn bottom color="error" dark fab fixed right @click="cancel">
       <v-icon>mdi-cancel</v-icon>
     </v-btn>
+
+    <v-bottom-sheet v-model="sheet" persistent>
+      <v-sheet class="text-center" height="200px">
+        <v-btn class="mt-6" color="error" @click="sheet = !sheet">Fechar</v-btn>
+        <div class="py-3">{{ message }}</div>
+      </v-sheet>
+    </v-bottom-sheet>
   </v-container>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data: () => ({
     valid: false,
+    message: "",
+    sheet: false,
     name: "",
     nameRules: [
       v => !!v || "O nome do aluno tem preenchimento obrigatório",
@@ -77,17 +88,44 @@ export default {
     ra: "",
     raRules: [
       v => !!v || "O RA do aluno tem preenchimento obrigatório",
-      v => (v && v.length > 0 && v.length <= 10) || "O RA do aluno deve conter entre 1 e 10 caracteres"
-    ]
+      v =>
+        (v && v.length > 0 && v.length <= 10) ||
+        "O RA do aluno deve conter entre 1 e 10 caracteres"
+    ],
+    queryRA: undefined
   }),
-
   methods: {
     validate() {
       this.$refs.form.validate();
+      this.message = "Teste de TExto";
+      this.sheet = true;
     },
     cancel() {
       this.$refs.form.reset();
-      this.$router.push("/student/list");
+      this.$router.push("/student/list");      
+    },
+    showError(message) {
+      this.message = message;
+      this.sheet = true;
+    }
+  },
+  created() {
+    this.queryRA = this.$route.params.ra;
+  },
+  mounted() {
+    if (this.queryRA !== undefined) {      
+      axios
+        .get(`http://localhost:3000/api/student/get/${this.queryRA}`)
+        .then(response => {
+          if (response.status === 200) {
+            this.ra = response.data.ra;
+            this.name = response.data.name;
+            this.email = response.data.email;
+            this.cpf = response.data.cpf;
+          } else {
+            this.showError("Erro ao carregar o registro.");
+          }
+        });
     }
   }
 };
