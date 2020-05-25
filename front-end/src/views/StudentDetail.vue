@@ -114,6 +114,22 @@ export default {
       this.message = message;
       this.sheet = true;
     },
+    loadStudent() {
+      if (this.queryRA !== undefined) {
+        axios
+          .get(`${this.globalApiUrl}api/student/get/${this.queryRA}`)
+          .then(response => {
+            if (response.status === 200) {
+              this.ra = response.data.ra;
+              this.name = response.data.name;
+              this.email = response.data.email;
+              this.cpf = response.data.cpf;
+            } else {
+              this.showError("Erro ao carregar o registro.");
+            }
+          });
+      }
+    },
     save() {
       let url = `${this.globalApiUrl}api/student/`;
 
@@ -132,7 +148,7 @@ export default {
             this.message = "Registro salvo com sucesso";
             setTimeout(() => {
               this.$router.push("/student/list");
-            }, 2000); 
+            }, 2000);
           } else {
             this.showError("Erro ao salvar o registro.");
           }
@@ -146,7 +162,7 @@ export default {
             this.message = "Registro salvo com sucesso";
             setTimeout(() => {
               this.$router.push("/student/list");
-            }, 2000);            
+            }, 2000);
           } else {
             this.showError("Erro ao salvar o registro.");
           }
@@ -158,20 +174,7 @@ export default {
     this.queryRA = this.$route.params.ra;
   },
   mounted() {
-    if (this.queryRA !== undefined) {
-      axios
-        .get(`${this.globalApiUrl}api/student/get/${this.queryRA}`)
-        .then(response => {
-          if (response.status === 200) {
-            this.ra = response.data.ra;
-            this.name = response.data.name;
-            this.email = response.data.email;
-            this.cpf = response.data.cpf;
-          } else {
-            this.showError("Erro ao carregar o registro.");
-          }
-        });
-    }
+    this.loadStudent();
   }
 };
 </script>
