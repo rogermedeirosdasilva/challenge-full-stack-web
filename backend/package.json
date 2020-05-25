@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/server.js",
-    "preteste": "NODE_ENV=teste npx sequelize db:migrate:undo:all && npx sequelize db:migrate && npx sequelize db:seed:all",
+    "preteste": "NODE_ENV=teste npx sequelize db:migrate:undo:all && NODE_ENV=teste npx sequelize db:migrate && NODE_ENV=teste npx sequelize db:seed:all",
     "teste": "NODE_ENV=teste jest --testTimeout=10000",
     "postteste": "NODE_ENV=teste npx sequelize db:migrate:undo:all",
     "predev": "NODE_ENV=dev",

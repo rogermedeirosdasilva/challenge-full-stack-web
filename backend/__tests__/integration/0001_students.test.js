@@ -60,20 +60,16 @@ describe("Students", () => {
    });
 
    it("Should delete an existing student from the database when you receive an existing RA number", async () => {
-      const response = await request(app).delete("/api/student/delete")
-         .send({
-            ra: "000120"
-         });
+      const response = await request(app).delete("/api/student/delete/000120")
+         .send();
 
       // Expects a response code 200 from API
       expect(response.status).toBe(200);
    });
 
    it("Should return a 204 code when attempting to remove a student with a non-existent RA number", async () => {
-      const response = await request(app).delete("/api/student/delete")
-         .send({
-            ra: "333222"
-         });
+      const response = await request(app).delete("/api/student/delete/333222")
+         .send();
 
       // Expects a response code 204 from API
       expect(response.status).toBe(204);

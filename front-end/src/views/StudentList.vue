@@ -26,7 +26,7 @@
         <template v-slot:item.email="{ item }">
           <span>
             <v-btn color="success" text link :to="`/student/edit/${item.ra}`">Editar</v-btn>
-            <v-btn color="error" text link :to="`/student/delete/${item.ra}`">Excluir</v-btn>
+            <v-btn color="error" text @click="confirmDelete(item)">Excluir</v-btn>
           </span>
         </template>
       </v-data-table>
@@ -35,6 +35,20 @@
     <v-btn bottom color="pink" dark fab fixed right link to="/student/add">
       <v-icon>mdi-plus</v-icon>
     </v-btn>
+
+    <v-row justify="center">
+      <v-dialog v-model="dialog" persistent max-width="290">
+        <v-card>
+          <v-card-title class="headline">Confirma a exclusão?</v-card-title>
+          <v-card-text>{{ message }}</v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="error" text @click="deleteStudent()">Confirmar</v-btn>
+            <v-btn color="primary" text @click="dialog = false">Cancelar</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
   </v-container>
 </template>
 
@@ -45,6 +59,9 @@ export default {
   data() {
     return {
       search: "",
+      message: "",
+      dialog: false,
+      currentStudent: null,
       headers: [
         {
           text: "RA",
@@ -59,10 +76,32 @@ export default {
       students: []
     };
   },
+  methods: {
+    loadStudents() {
+      axios
+        .get(`${this.globalApiUrl}api/student/get`)
+        .then(response => (this.students = response.data));
+    },
+    confirmDelete(item) {
+      this.message = `Confirma a exclusão do aluno "${item.name}"?`;
+      this.dialog = true;
+      this.currentStudent = item;
+    },
+    deleteStudent() {
+      axios
+        .delete(`${this.globalApiUrl}api/student/delete/${this.currentStudent.ra}`, {
+          ra: this.currentStudent.ra
+        })
+        .then(response => {
+          if (response.status === 200) {
+            this.loadStudents();
+          }
+          this.dialog = false;
+        });
+    }
+  },
   mounted() {
-    axios
-      .get(`${this.globalApiUrl}api/student/get`)
-      .then(response => (this.students = response.data));
+    this.loadStudents();
   },
   filters: {
     formatCPF(value) {

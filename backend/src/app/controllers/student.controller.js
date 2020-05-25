@@ -41,7 +41,7 @@ class StudentController {
 
    async delete(req, res) {
       try {
-         const { ra } = req.body;
+         const { ra } = req.params;
          const deleted = await students.destroy({
             where: { ra }
          });

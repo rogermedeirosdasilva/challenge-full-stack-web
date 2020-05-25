@@ -1,10 +1,10 @@
 require('dotenv').config({
    path:
-      process.env.NODE_ENV === 'prod'
-         ? './src/environment/.env'
+      process.env.NODE_ENV === 'teste'
+         ? './src/environment/.env.test'
          : process.env.NODE_ENV === 'dev'
             ? './src/environment/.env.dev'
-            : './src/environment/.env.test'
+            : './src/environment/.env'
 });
 
 const express = require('express');

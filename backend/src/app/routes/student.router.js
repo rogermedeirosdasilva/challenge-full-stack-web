@@ -11,7 +11,7 @@ class StudentRouter {
     // update student data
     routes.put("/api/student/update/:ra", StudentController.update);
     // remove a student
-    routes.delete("/api/student/delete", StudentController.delete);
+    routes.delete("/api/student/delete/:ra", StudentController.delete);
   }
 }
 
