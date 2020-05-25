@@ -21,6 +21,7 @@
           <v-img src="@/assets/white-logo.png" alt="Grupo A" width="60"></v-img>
         </span>
       </v-toolbar-title>
+      <!--
       <v-text-field
         flat
         solo-inverted
@@ -29,6 +30,7 @@
         label="Pesquisar"
         class="hidden-sm-and-down"
       ></v-text-field>
+      -->
       <v-spacer></v-spacer>
       <v-btn icon>
         <v-icon>mdi-bell</v-icon>
