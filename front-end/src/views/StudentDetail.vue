@@ -28,6 +28,7 @@
         :rules="raRules"
         placeholder="Informe o registro acadêmico"
         label="RA"
+        :disabled="queryRA !== undefined"
         :counter="10"
         @blur="validate()"
         required
@@ -37,6 +38,7 @@
         v-model="cpf"
         :rules="cpfRules"
         label="CPF"
+        :disabled="queryRA !== undefined"
         :counter="11"
         placeholder="Informe o número do documento"
         @blur="validate()"
@@ -44,7 +46,7 @@
       ></v-text-field>
     </v-form>
 
-    <v-btn bottom color="success" dark fab fixed :disabled="!valid" @click="validate" id="btnSave">
+    <v-btn bottom color="success" dark fab fixed :disabled="!valid" @click="save" id="btnSave">
       <v-icon>mdi-checkbox-marked-circle</v-icon>
     </v-btn>
 
@@ -58,6 +60,11 @@
         <div class="py-3">{{ message }}</div>
       </v-sheet>
     </v-bottom-sheet>
+
+    <v-snackbar v-model="snackbar" :timeout="2000">
+      {{ message }}
+      <v-btn color="blue" text @click="snackbar = false">Fechar</v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -92,30 +99,68 @@ export default {
         (v && v.length > 0 && v.length <= 10) ||
         "O RA do aluno deve conter entre 1 e 10 caracteres"
     ],
-    queryRA: undefined
+    queryRA: undefined,
+    snackbar: false
   }),
   methods: {
     validate() {
       this.$refs.form.validate();
-      this.message = "Teste de TExto";
-      this.sheet = true;
     },
     cancel() {
       this.$refs.form.reset();
-      this.$router.push("/student/list");      
+      this.$router.push("/student/list");
     },
     showError(message) {
       this.message = message;
       this.sheet = true;
+    },
+    save() {
+      let url = `${this.globalApiUrl}api/student/`;
+
+      const data = {
+        ra: this.ra,
+        name: this.name,
+        email: this.email,
+        cpf: this.cpf
+      };
+
+      if (this.queryRA === undefined) {
+        url = `${url}create`;
+        axios.post(url, data).then(response => {
+          if (response.status === 201) {
+            this.snackbar = true;
+            this.message = "Registro salvo com sucesso";
+            setTimeout(() => {
+              this.$router.push("/student/list");
+            }, 2000); 
+          } else {
+            this.showError("Erro ao salvar o registro.");
+          }
+        });
+      } else {
+        url = `${url}update/${this.queryRA}`;
+
+        axios.put(url, data).then(response => {
+          if (response.status === 200) {
+            this.snackbar = true;
+            this.message = "Registro salvo com sucesso";
+            setTimeout(() => {
+              this.$router.push("/student/list");
+            }, 2000);            
+          } else {
+            this.showError("Erro ao salvar o registro.");
+          }
+        });
+      }
     }
   },
   created() {
     this.queryRA = this.$route.params.ra;
   },
   mounted() {
-    if (this.queryRA !== undefined) {      
+    if (this.queryRA !== undefined) {
       axios
-        .get(`http://localhost:3000/api/student/get/${this.queryRA}`)
+        .get(`${this.globalApiUrl}api/student/get/${this.queryRA}`)
         .then(response => {
           if (response.status === 200) {
             this.ra = response.data.ra;

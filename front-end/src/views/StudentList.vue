@@ -61,7 +61,7 @@ export default {
   },
   mounted() {
     axios
-      .get("http://localhost:3000/api/student/get")
+      .get(`${this.globalApiUrl}api/student/get`)
       .then(response => (this.students = response.data));
   },
   filters: {
